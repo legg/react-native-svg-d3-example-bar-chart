@@ -39,12 +39,19 @@ import {
     path
 } from 'd3-path'
 
+const colours = {
+    black: '#000',
+    blue: '#0000FF'
+}
+
 // create the barchart (http://bl.ocks.org/mbostock/3885304)
 const data = [
     {frequency: 2, letter: 'a'},
     {frequency: 5, letter: 'b'},
     {frequency: 4, letter: 'c'},
     {frequency: 1, letter: 'd'},
+    {frequency: 2, letter: 'e'},
+    {frequency: 3, letter: 'f'},
 ]
 
 class App extends Component {
@@ -89,46 +96,41 @@ class BarChart extends Component {
         const notch = 5
         const labelDistance = 9
 
-        const black = '#000'
-
         const svg = (
-            <Svg width={screen.width} height={screen.height}>
+            <Svg width={screen.width} height={screen.height} >
                 <G translate={margin.left + "," + margin.top}>
-                    <G translate={"0," + height}
-                       fill="none"
-                       font-size="10"
-                       font-family="sans-serif"
-                       text-anchor="middle">
+                    <G translate={"0," + height} >
                         <G key={-1}>
-                            <Path stroke={black} d={bottomAxisD} key="-1"/>
+                            <Path stroke={colours.black} d={bottomAxisD} key="-1"/>
                             {
                                 data.map((d, i) => (
-                                    <G opacity="1" key={i + 1} translate={x(d.letter) + labelDx + ",0"}>
-                                        <Line stroke={black} y2={notch}/>
-                                        <Text fill={black} y={labelDistance} dx={0}>
-                                            {d.letter}
-                                        </Text>
+                                    <G key={i + 1} translate={x(d.letter) + labelDx + ",0"}>
+                                        <Line stroke={colours.black} y2={notch}/>
+                                        <Text fill={colours.black} y={labelDistance}>{d.letter}</Text>
                                     </G>
                                 ))
                             }
                         </G>
                         <G key={-2}>
-                            <Path stroke={black} d={leftAxisD} key="-1"/>
+                            <Path stroke={colours.black} d={leftAxisD} key="-1"/>
                             {
                                 leftAxis.map((d, i) => (
-                                    <G opacity="1" key={i + 1} translate={"0," + (y(d) - height)}>
-                                        <Line stroke={black} x1={notch} x2={labelDistance}/>
-                                        <Text fill={black} x={-labelDistance} y={-notch}>
-                                            {d}
-                                        </Text>
+                                    <G key={i + 1} translate={"0," + (y(d) - height)}>
+                                        <Line stroke={colours.black} x1={notch} x2={labelDistance}/>
+                                        <Text fill={colours.black} x={-labelDistance} y={-notch}>{d}</Text>
                                     </G>
                                 ))
                             }
                         </G>
                         {
-                            data.map((d, i) => {
-                                return <Rect key={i} />
-                            })
+                            data.map((d, i) => (
+                                <Rect key={i}
+                                      x={x(d.letter)}
+                                      y={y(d.frequency)-height}
+                                      width={x.bandwidth()}
+                                      height={height - y(d.frequency)}
+                                      fill={colours.blue} />
+                            ))
                         }
                     </G>
                 </G>
