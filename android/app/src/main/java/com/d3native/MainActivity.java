@@ -1,7 +1,6 @@
 package com.d3native;
 
 import com.facebook.react.ReactActivity;
-import com.horcrux.svg.RNSvgPackage;
 
 public class MainActivity extends ReactActivity {
 
